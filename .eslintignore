@@ -1,0 +1,23 @@
+# Ignore directories where dependencies are installed
+**/node_modules/
+
+# Ignore build directories
+**/build/
+**/dist/
+
+# Ignore configuration files
+**/*.config.js
+**/*.config.ts
+
+# Ignore all log files
+*.log
+
+# Ignore all lock files
+*.lock
+
+# Ignore specific folders that may contain files not meant to be linted or formatted
+public/
+coverage/
+
+# Ignore TypeScript declaration files
+**/*.d.ts
