@@ -1,47 +1,32 @@
 # General ignores
 
 # Dependency directories
-/node_modules/
-/.pnp
-.pnp.js
+**/node_modules/
+**/.pnp
+**/.pnp.js
 
 # Log files
-*.log*
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+**/*.log
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
 
 # Environment variables
-.env
-.env.local
-.env.*.local
-.env.development.local
-.env.test.local
-.env.production.local
+**/.env
+**/.env.local
+**/.env.*.local
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
 
 # System files
-.DS_Store
-
-# Client-side specific ignores
-
-# Production build directory
-/client/build/
-
-# Coverage directory
-/client/coverage/
-
-# Server-side specific ignores
+**/.DS_Store
 
 # Compiled files directory
-/server/dist/
+**/dist/
 
-# Environment variable files
-/server/.env
+# Production build directory
+**/build/
 
-# Miscellaneous
-
-# Coverage directory for server or other parts of the project
-/coverage/
-
-# Build directory for server or other parts of the project
-/build/
+# Coverage directory
+**/coverage/

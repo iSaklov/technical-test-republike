@@ -1,23 +1,43 @@
-# Ignore directories where dependencies are installed
+# General ignores
+
+# Dependency directories
 **/node_modules/
 
-# Ignore build directories
-**/build/
+# Log files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+**/.env
+**/.env.local
+**/.env.*.local
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
+
+# System files
+**/.DS_Store
+
+# Compiled files directory
 **/dist/
 
-# Ignore configuration files
+# Production build directory
+**/build/
+
+# Coverage directory
+**/coverage/
+
+# Configuration files
 **/*.config.js
 **/*.config.ts
 
-# Ignore all log files
-*.log
-
-# Ignore all lock files
+# Lock files
 *.lock
 
-# Ignore specific folders that may contain files not meant to be linted or formatted
-public/
-coverage/
+# Public directory
+**/public/
 
-# Ignore TypeScript declaration files
+# TypeScript declaration files
 **/*.d.ts
