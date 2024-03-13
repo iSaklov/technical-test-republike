@@ -1,7 +1,11 @@
+import dotenv from 'dotenv'
 import { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import User from '../models/User'
+
+// Load environment variables from the .env file
+dotenv.config()
 
 // Ensure the JWT_SECRET environment variable is set
 if (!process.env.JWT_SECRET) {
@@ -14,6 +18,9 @@ const jwtSecret = process.env.JWT_SECRET
 // User registration
 export const registerUser = async (req: Request, res: Response) => {
   try {
+    if (!req.body.password) {
+      return res.status(400).send('Password is required')
+    }
     // Hash the password
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
 

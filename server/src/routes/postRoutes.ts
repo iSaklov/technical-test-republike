@@ -1,4 +1,5 @@
 import express from 'express'
+import authenticateToken from '../middleware/authenticateToken'
 import {
   createPost,
   getPosts,
@@ -9,15 +10,15 @@ import {
 const router = express.Router()
 
 // Creating a post
-router.post('/', createPost)
+router.post('/', authenticateToken, createPost)
 
 // Retrieving all posts
-router.get('/', getPosts)
+router.get('/', authenticateToken, getPosts)
 
 // Liking a post
-router.put('/:postId/like', likePost)
+router.put('/:postId/like', authenticateToken, likePost)
 
 // Disliking a post
-router.put('/:postId/dislike', dislikePost)
+router.put('/:postId/dislike', authenticateToken, dislikePost)
 
 export default router
