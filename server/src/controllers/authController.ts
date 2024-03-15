@@ -36,7 +36,13 @@ export const registerUser = async (req: Request, res: Response) => {
     // Save the user in the database
     await user.save()
 
-    res.status(201).send('User registered successfully')
+    // After successful registration
+    const token = jwt.sign({ id: user._id }, jwtSecret, {
+      expiresIn: '1h',
+    })
+
+    // Send token back to the client along with a success message
+    res.status(201).json({ token, message: 'User registered successfully' })
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).send(error.message)
@@ -64,7 +70,12 @@ export const loginUser = async (req: Request, res: Response) => {
     const token = jwt.sign({ id: user._id }, jwtSecret, {
       expiresIn: '1h',
     })
-    res.header('auth-token', token).send(token)
+
+    // Send the token and a welcome message back to the client
+    res.json({
+      token,
+      message: `Welcome back, ${user.firstname}!`,
+    })
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).send(error.message)

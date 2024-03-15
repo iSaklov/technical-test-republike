@@ -30,8 +30,8 @@ yarn-error.log*
 **/coverage/
 
 # Configuration files
-**/*.config.js
-**/*.config.ts
+# **/*.config.js
+# **/*.config.ts
 
 # Lock files
 *.lock

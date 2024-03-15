@@ -1,0 +1,29 @@
+@font-face {
+  font-family: 'TT Firs Neue';
+  src:
+    url('../public/fonts/TTFirsNeue/TTFirsNeue-Regular.woff2') format('woff2'),
+    url('../public/fonts/TTFirsNeue/TTFirsNeue-Regular.woff') format('woff'),
+    url('../public/fonts/TTFirsNeue/TTFirsNeue-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TT Firs Neue';
+  src:
+    url('../public/fonts/TTFirsNeue/TTFirsNeue-DemiBold.woff2') format('woff2'),
+    url('../public/fonts/TTFirsNeue/TTFirsNeue-DemiBold.woff') format('woff'),
+    url('../public/fonts/TTFirsNeue/TTFirsNeue-DemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TT Firs Neue';
+  src:
+    url('../public/fonts/TTFirsNeue/TTFirsNeue-Bold.woff2') format('woff2'),
+    url('../public/fonts/TTFirsNeue/TTFirsNeue-Bold.woff') format('woff'),
+    url('../public/fonts/TTFirsNeue/TTFirsNeue-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}

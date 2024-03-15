@@ -1,5 +1,6 @@
 import express from 'express'
 import dotenv from 'dotenv'
+import cors from 'cors'
 import mongoose from 'mongoose'
 import authRoutes from './routes/authRoutes'
 import postRoutes from './routes/postRoutes'
@@ -9,6 +10,7 @@ dotenv.config()
 
 // Initialize the Express application
 const app = express()
+app.use(cors()) // Enable CORS for all requests
 app.use(express.json()) // For parsing JSON request bodies
 
 // Using routes
