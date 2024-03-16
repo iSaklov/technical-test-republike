@@ -6,10 +6,10 @@ import {
   Navigate,
 } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
-import AuthLayout from './components/AuthLayout'
-import Login from './components/Login'
-import Register from './components/Register'
-import Posts from './components/Posts'
+import AuthLayout from './components/auth/AuthLayout'
+import Login from './components/auth/Login'
+import Register from './components/auth/Register'
+import Posts from './components/posts/Posts'
 
 function App() {
   return (

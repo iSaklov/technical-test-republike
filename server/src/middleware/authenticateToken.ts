@@ -1,19 +1,19 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt, { Secret } from 'jsonwebtoken'
-import { IUser } from '../interfaces/IUser'
 
 // Define our own type that extends the Request interface with an additional user property
-interface RequestWithUser extends Request {
-  user?: IUser
+export interface RequestWithUserId extends Request {
+  userId?: string
 }
 
 const authenticateToken = (
-  req: RequestWithUser,
+  req: RequestWithUserId,
   res: Response,
   next: NextFunction,
 ) => {
   const authHeader = req.headers['authorization']
   const token = authHeader && authHeader.split(' ')[1] // Extract the token from the Authorization header
+  console.log('token', token)
 
   if (token == null) {
     return res.sendStatus(401) // If there is no token, return status 401 Unauthorized
@@ -29,16 +29,15 @@ const authenticateToken = (
 
   jwt.verify(token, jwtSecret, (err, decoded) => {
     if (err) {
-      return res.sendStatus(403)
+      return res.sendStatus(403) // Token is invalid or expired
     }
 
-    // Check if decoded is an object and contains the required fields
-    if (typeof decoded === 'object' && decoded !== null && 'email' in decoded) {
-      const user = decoded as IUser // Now you can assume that decoded matches IUser
-      req.user = user // Store the user data in the request object
-      next() // Proceed to the next middleware/handler
+    if (typeof decoded === 'object' && decoded !== null && 'id' in decoded) {
+      // Directly attaching the user ID to the request for clarity and direct access
+      req.userId = decoded.id
+      next()
     } else {
-      return res.sendStatus(403)
+      return res.sendStatus(403) // Decoded token structure is not as expected
     }
   })
 }
