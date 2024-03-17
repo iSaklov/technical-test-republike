@@ -44,7 +44,13 @@ export const registerUser = async (req: Request, res: Response) => {
     // Send token and userID back to the client along with a success message
     res.status(201).json({
       token,
-      // userId: user._id,
+      user: {
+        _id: user._id,
+        username: user.username,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        // Any other user info you might want to include
+      },
       message: 'User registered successfully',
     })
   } catch (error) {
@@ -75,10 +81,16 @@ export const loginUser = async (req: Request, res: Response) => {
       expiresIn: '1h',
     })
 
-    // Send token and welcome message back to the client
+    // Send token, user data and welcome message back to the client
     res.json({
       token,
-      // userId: user._id,
+      user: {
+        _id: user._id,
+        username: user.username,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        // Any other user info you might want to include
+      },
       message: `Welcome back, ${user.firstname}!`,
     })
   } catch (error) {

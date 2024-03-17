@@ -16,7 +16,7 @@ export const createPost = async (req: RequestWithUserId, res: Response) => {
     }
 
     const post = new Post({
-      userId: req.userId, // Now ensured to be not undefined
+      author: req.userId, // Now ensured to be not undefined
       text: req.body.text,
     })
 
@@ -36,6 +36,10 @@ export const getPosts = async (req: Request, res: Response) => {
   try {
     // const posts = await Post.find().populate('userId', 'username')
     const posts = await Post.find()
+      .populate('author', 'firstname lastname username') // Populate user data
+      .lean() // Convert results into plain JavaScript objects
+      .sort({ publishedAt: -1 })
+
     res.json(posts)
   } catch (error) {
     if (error instanceof Error) {
@@ -63,12 +67,24 @@ export const likePost = async (req: RequestWithUserId, res: Response) => {
     // Convert userId from string to ObjectId
     const userId = new mongoose.Types.ObjectId(req.userId)
 
-    if (!post.likes.includes(userId)) {
-      await post.updateOne({ $push: { likes: req.userId } })
-      res.status(200).send('The post has been liked')
+    // If the user has already liked the post, remove the like
+    if (post.likes.includes(userId)) {
+      await post.updateOne({ $pull: { likes: userId } })
     } else {
-      res.status(400).send('You already liked this post')
+      // Add a like and remove a dislike if it exists
+      await post.updateOne({
+        $addToSet: { likes: userId },
+        $pull: { dislikes: userId },
+      })
     }
+
+    const updatedPost = await Post.findById(req.params.postId).populate(
+      'author',
+      'firstname lastname username',
+    )
+
+    // Return the updated post
+    res.status(200).json(updatedPost)
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).send(error.message)
@@ -95,12 +111,24 @@ export const dislikePost = async (req: RequestWithUserId, res: Response) => {
     // Convert userId from string to ObjectId
     const userId = new mongoose.Types.ObjectId(req.userId)
 
-    if (!post.dislikes.includes(userId)) {
-      await post.updateOne({ $push: { dislikes: req.userId } })
-      res.status(200).send('The post has been disliked')
+    // If the user has already disliked the post, remove the dislike
+    if (post.dislikes.includes(userId)) {
+      await post.updateOne({ $pull: { dislikes: userId } })
     } else {
-      res.status(400).send('You already disliked this post')
+      // Add a dislike and remove a like if it exists
+      await post.updateOne({
+        $addToSet: { dislikes: userId },
+        $pull: { likes: userId },
+      })
     }
+
+    const updatedPost = await Post.findById(req.params.postId).populate(
+      'author',
+      'firstname lastname username',
+    )
+
+    // Return the updated post
+    res.status(200).json(updatedPost)
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).send(error.message)

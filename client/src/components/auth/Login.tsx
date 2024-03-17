@@ -21,8 +21,8 @@ const Login: React.FC = () => {
       })
 
       if (response.ok) {
-        const { token, message } = await response.json()
-        login(token)
+        const { token, user, message } = await response.json()
+        login(token, user)
         alert(message)
         navigate('/posts')
       } else {

@@ -13,6 +13,7 @@ module.exports = {
         'primary-5': 'rgba(123, 97, 255, 0.05)', // 5% transparencyƒ
         // Additional colors
         'dark-blue': '#1A1F36',
+        'very-light-gray': '#E8E9EB',
         'light-gray': '#E0E1E4',
         'medium-gray': '#797979',
         'dark-gray': '#9D9D9D',
