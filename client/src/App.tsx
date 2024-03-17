@@ -32,8 +32,8 @@ function App() {
               </AuthLayout>
             }
           />
-          <Route path="/posts" element={<Posts />} />
-          <Route path="*" element={<Navigate to="/login" />} />
+          <Route path="/" element={<Posts />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Router>
     </AuthProvider>

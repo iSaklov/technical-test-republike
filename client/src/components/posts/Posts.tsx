@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { IPost } from '../../interfaces/IPost'
 import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter'
-import AddPost from './AddPost'
+import PostModal from './PostModal'
 import Button from '../UI/Button'
 
 const Posts: React.FC = () => {
   const [posts, setPosts] = useState<IPost[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const { isAuthenticated, user, logout } = useAuth() // Use the authentication context
   const navigate = useNavigate()
 
@@ -88,6 +89,31 @@ const Posts: React.FC = () => {
     }
   }
 
+  const openModal = () => setIsModalOpen(true)
+  const closeModal = () => setIsModalOpen(false)
+
+  const handlePostSubmit = async (postText: string) => {
+    try {
+      const response = await fetch('http://localhost:3001/api/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({ text: postText }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to create post')
+      }
+
+      closeModal() // Close the modal window after submission
+      await fetchPosts() // Fetch posts again to update the list with the new post
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/login') // Redirect to login page if not authenticated
@@ -97,30 +123,24 @@ const Posts: React.FC = () => {
     fetchPosts()
   }, [isAuthenticated, navigate])
 
-  useEffect(() => {
-    console.log(
-      'post',
-      posts.map((post) => console.log(post)),
-    )
-    // console.log('user', user?._id)
-    // console.log('user', user)
-  }, [posts, user])
-
   return (
     <div className="min-h-screen">
-      {/* <AddPost onPostAdded={fetchPosts} /> */}
       <header className="border-b border-very-light-gray">
         <div className="flex items-center justify-between w-full container mx-auto px-8">
-          <div className="px-[7px]">
-            <img
-              src="/assets/logo-black.svg"
-              alt="Logo"
-              className="h-[36px] w-[36px]"
-            />
-          </div>
-          <h1 className="flex-grow text-center text-xl font-bold pt-5 pb-[18px]">
-            Home
-          </h1>
+          <Link to="/">
+            <div className="px-[7px]">
+              <img
+                src="/assets/logo-black.svg"
+                alt="Logo"
+                className="h-[36px] w-[36px]"
+              />
+            </div>
+          </Link>
+          <Link to="/">
+            <h1 className="flex-grow text-center text-xl font-bold pt-5 pb-[18px]">
+              Home
+            </h1>
+          </Link>
           {/* Use an invisible block for balance */}
           <div className="h-[36px] w-[36px] invisible" />
         </div>
@@ -141,12 +161,21 @@ const Posts: React.FC = () => {
             </div>
           </header>
           <nav className="w-full space-y-6">
-            <Button className="bg-primary-5 !text-primary flex gap-x-2 rounded-lg p-3">
-              <img src="/assets/icons/home.svg" alt="" />
-              Home
+            <Link to="/">
+              <Button className="bg-primary-5 !text-primary flex gap-x-2 !rounded-lg items-center">
+                <img src="/assets/icons/home.svg" alt="" />
+                Home
+              </Button>
+            </Link>
+            <Button onClick={openModal} className="!rounded-lg">
+              Create new post
             </Button>
-            <Button className="rounded-lg">Create new post</Button>
-            <Button onClick={handleLogout} className="bg-black rounded-lg">
+            <PostModal
+              isOpen={isModalOpen}
+              onClose={closeModal}
+              onPostSubmit={handlePostSubmit}
+            />
+            <Button onClick={handleLogout} className="!bg-black !rounded-lg">
               Sign Out
             </Button>
           </nav>

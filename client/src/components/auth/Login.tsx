@@ -24,7 +24,7 @@ const Login: React.FC = () => {
         const { token, user, message } = await response.json()
         login(token, user)
         alert(message)
-        navigate('/posts')
+        navigate('/')
       } else {
         alert('Failed to login')
       }
