@@ -1,4 +1,5 @@
 import express from 'express'
+import path from 'path'
 import dotenv from 'dotenv'
 import cors from 'cors'
 import mongoose from 'mongoose'
@@ -16,6 +17,15 @@ app.use(express.json()) // For parsing JSON request bodies
 // Using routes
 app.use('/api/auth', authRoutes)
 app.use('/api/posts', postRoutes)
+
+if (process.env.NODE_ENV === 'production') {
+  // After all other middleware/API routes
+  app.use(express.static(path.join(__dirname, '../../client/build')))
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../../client', 'build', 'index.html'))
+  })
+}
 
 // The port on which the server will run. The value is taken from environment variables, or 3001 is used by default
 const port = process.env.PORT || 3001
