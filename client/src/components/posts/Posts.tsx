@@ -22,11 +22,14 @@ const Posts: React.FC = () => {
   const fetchPosts = async () => {
     setIsLoading(true)
     try {
-      const response = await fetch('http://localhost:3001/api/posts', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/api/posts`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
         },
-      })
+      )
       if (!response.ok) {
         throw new Error('Failed to fetch posts')
       }
@@ -42,7 +45,7 @@ const Posts: React.FC = () => {
   const handleLike = async (postId: string) => {
     try {
       const response = await fetch(
-        `http://localhost:3001/api/posts/${postId}/like`,
+        `${process.env.REACT_APP_API_BASE_URL}/api/posts/${postId}/like`,
         {
           method: 'PUT',
           headers: {
@@ -67,7 +70,7 @@ const Posts: React.FC = () => {
   const handleDislike = async (postId: string) => {
     try {
       const response = await fetch(
-        `http://localhost:3001/api/posts/${postId}/dislike`,
+        `${process.env.REACT_APP_API_BASE_URL}/api/posts/${postId}/dislike`,
         {
           method: 'PUT',
           headers: {
@@ -94,14 +97,17 @@ const Posts: React.FC = () => {
 
   const handlePostSubmit = async (postText: string) => {
     try {
-      const response = await fetch('http://localhost:3001/api/posts', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/api/posts`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+          body: JSON.stringify({ text: postText }),
         },
-        body: JSON.stringify({ text: postText }),
-      })
+      )
 
       if (!response.ok) {
         throw new Error('Failed to create post')
