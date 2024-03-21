@@ -6,19 +6,23 @@ import Button from '../UI/Button'
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
+  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false)
   const navigate = useNavigate()
   const { login } = useAuth()
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
     try {
-      const response = await fetch('http://localhost:3001/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/api/auth/login`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
         },
-        body: JSON.stringify({ email, password }),
-      })
+      )
 
       if (response.ok) {
         const { token, user, message } = await response.json()
@@ -31,6 +35,10 @@ const Login: React.FC = () => {
     } catch (error) {
       console.error('Failed to login', error)
     }
+  }
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible((prevState) => !prevState)
   }
 
   return (
@@ -58,15 +66,21 @@ const Login: React.FC = () => {
             <label htmlFor="password" className="text-sm/5 font-semibold">
               Password
             </label>
-            <div>
+            <div className="relative">
               <input
                 id="password"
-                type="password"
+                type={isPasswordVisible ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password"
+                placeholder="your very secure password"
                 required
                 className="w-full px-4 py-2 text-sm/5 outline-0 border-light-gray border rounded placeholder:text-border-light-gray bg-transparent"
+              />
+              <img
+                src="/assets/icons/eye.svg"
+                alt=""
+                className="h-4 w-4 absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer"
+                onClick={togglePasswordVisibility}
               />
             </div>
           </div>
